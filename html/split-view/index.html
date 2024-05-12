@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resizable Split View</title>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
+    .split-container {
+        display: flex;
+        height: 100%;
+        overflow: hidden;
+    }
+    .split-bar {
+        width: 5px;
+        cursor: col-resize;
+        background-color: #ccc;
+    }
+    .split-content {
+        overflow-y: auto;
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+</style>
+</head>
+<body>
+
+<div class="split-container" id="split-container">
+    <div class="split-content" id="left-panel">
+        <!-- Content for left panel -->
+        <h2>Left Panel</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut justo vitae metus lacinia venenatis vel ut arcu.</p>
+    </div>
+    <div class="split-bar" id="split-bar"></div>
+    <div class="split-content" id="right-panel">
+        <!-- Content for right panel -->
+        <h2>Right Panel</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut justo vitae metus lacinia venenatis vel ut arcu.</p>
+    </div>
+</div>
+
+<script>
+    const leftPanel = document.getElementById('left-panel');
+    const rightPanel = document.getElementById('right-panel');
+    const splitBar = document.getElementById('split-bar');
+    const container = document.getElementById('split-container');
+    let isResizing = false;
+
+    splitBar.addEventListener('mousedown', startResize);
+
+    function startResize(e) {
+        isResizing = true;
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', endResize);
+    }
+
+    function handleMouseMove(e) {
+        if (isResizing) {
+            const containerRect = container.getBoundingClientRect();
+            const newWidth = e.clientX - containerRect.left;
+            leftPanel.style.width = newWidth + 'px';
+            rightPanel.style.width = (containerRect.width - newWidth - splitBar.offsetWidth) + 'px';
+        }
+    }
+
+    function endResize(e) {
+        isResizing = false;
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', endResize);
+    }
+</script>
+
+</body>
+</html>
